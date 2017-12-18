@@ -1,0 +1,21 @@
+﻿using UnityEngine;
+using UnityEditor;
+using System.IO;
+
+[InitializeOnLoad]
+public class Startup
+{
+    static Startup()
+    {
+        string projectPath = Application.dataPath + "/_" + Directory.GetParent(Application.dataPath).Name;
+
+        Directory.CreateDirectory(projectPath);
+        Directory.CreateDirectory(projectPath + "/Scripts");
+        Directory.CreateDirectory(projectPath + "/Graphics");
+        Directory.CreateDirectory(projectPath + "/Prefabs");
+        Directory.CreateDirectory(projectPath + "/Scenes");
+        Directory.CreateDirectory(projectPath + "/Builds");
+
+        AssetDatabase.Refresh();
+    }
+}
