@@ -1,13 +1,25 @@
 ﻿using UnityEngine;
 using UnityEditor;
+using System;
 using System.IO;
+using System.Diagnostics;
 
 [InitializeOnLoad]
 public class Startup
 {
     static Startup()
     {
-        string projectPath = Application.dataPath + "/_" + Directory.GetParent(Application.dataPath).Name;
+        UnityEngine.Debug.Log("Your Personal Ninja");
+
+#if UNITY_EDITOR
+        DirectoryInfo projectDirectory = Directory.GetParent(Application.dataPath);
+        string projectPath = Application.dataPath + "/_" + projectDirectory.Name;
+#else
+        // TODO: WIP
+
+        DirectoryInfo projectDirectory = new DirectoryInfo(Application.dataPath);
+        string projectPath = Application.dataPath + "/_#SCRIPTNAME#";
+#endif
 
         Directory.CreateDirectory(projectPath);
         Directory.CreateDirectory(projectPath + "/Scripts");
@@ -15,6 +27,18 @@ public class Startup
         Directory.CreateDirectory(projectPath + "/Prefabs");
         Directory.CreateDirectory(projectPath + "/Scenes");
         Directory.CreateDirectory(projectPath + "/Builds");
+
+        string scriptPath = new StackTrace(new StackFrame(true)).GetFrame(0).GetFileName();
+
+        // File.Delete(scriptPath);
+
+        string relativePath = new Uri(projectDirectory.FullName + "/" ).MakeRelativeUri(new Uri(scriptPath)).ToString();
+         
+        // Auto-reloads... Don't do this! (And auto-add .cs at the end of the filename :( )
+        // UnityEngine.Debug.Log(AssetDatabase.RenameAsset(relativePath, Path.GetFileName(relativePath) + ".disabled"));
+
+        // AssetDatabase.DeleteAsset(relativePath);
+        // AssetDatabase.MoveAssetToTrash(relativePath);
 
         AssetDatabase.Refresh();
     }
