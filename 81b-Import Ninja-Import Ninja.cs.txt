@@ -22,11 +22,15 @@ public class Startup
 #endif
 
         Directory.CreateDirectory(projectPath);
+
         Directory.CreateDirectory(projectPath + "/Scripts");
         Directory.CreateDirectory(projectPath + "/Graphics");
         Directory.CreateDirectory(projectPath + "/Prefabs");
         Directory.CreateDirectory(projectPath + "/Scenes");
         Directory.CreateDirectory(projectPath + "/Builds");
+
+        // Don't put your game logic in here - it's removed when building the game
+        Directory.CreateDirectory(projectPath + "/Editor");
 
         string scriptPath = new StackTrace(new StackFrame(true)).GetFrame(0).GetFileName();
 
